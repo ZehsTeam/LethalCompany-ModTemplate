@@ -1,0 +1,97 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    
+    <AssemblyName>com.github.zehsteam.$(MSBuildProjectName)</AssemblyName> <!-- PLUGIN_GUID -->
+    <Product>$(MSBuildProjectName)</Product>                               <!-- PLUGIN_NAME -->
+    <Version>1.0.0</Version>                                               <!-- PLUGIN_VERSION -->
+    <Authors>Zehs</Authors>
+    <Description></Description>
+    <Copyright>Copyright © 2026 Zehs</Copyright>
+    
+    <RootNamespace>com.github.zehsteam.$(MSBuildProjectName)</RootNamespace>
+    
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>embedded</DebugType>
+    
+    <!-- Trim the project path in debug symbols -->
+    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=./</PathMap>
+    
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json;
+    </RestoreAdditionalProjectSources>
+  </PropertyGroup>
+
+  <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" />
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- AssetBundle File -->
+  <ItemGroup>
+    <None Condition="Exists('$(AssetBundleFilePath)')" Include="$(AssetBundleFilePath)" Link="$(AssetBundleFileName)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!-- Dependencies -->
+  <ItemGroup>
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.4.*" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" PrivateAssets="all" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.*" />
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.62" PrivateAssets="all" IncludeAssets="compile" />
+    <PackageReference Include="LethalCompany.GameLibs.Steam" Version="73.0.0-ngd.0" PrivateAssets="all" />
+  </ItemGroup>
+  
+  <!-- Mod Dependencies -->
+  <ItemGroup>
+    <Reference Include="LethalConfig" HintPath="$(BepInExPluginsFolder)\AinaVT-LethalConfig\LethalConfig\LethalConfig.dll" />
+  </ItemGroup>
+
+  <!-- Settings -->
+  <PropertyGroup>
+    <Game>lethal-company</Game>
+    <ThunderstoreTeamName>Zehs</ThunderstoreTeamName>
+    <AssetBundleFileName>modtemplate_assets</AssetBundleFileName>
+    <AssetBundleFolder>D:\LethalCompanyUnityProjects\LethalCompanyDecompiledV73\Assets\LethalCompany\Mods\AssetBundles</AssetBundleFolder>
+    
+    <GaleProfileName>Mod Development</GaleProfileName>
+    
+    <GaleDataFolder>$(AppData)\com.kesomannen.gale</GaleDataFolder>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <AssetBundleFilePath>$(AssetBundleFolder)\$(AssetBundleFileName)</AssetBundleFilePath>
+    
+    <GaleProfilesFolder>$(GaleDataFolder)\$(Game)\profiles</GaleProfilesFolder>
+    
+    <BepInExPluginsFolder>$(GaleProfilesFolder)\$(GaleProfileName)\BepInEx\plugins</BepInExPluginsFolder>
+    
+    <PluginFolder>$(BepInExPluginsFolder)\$(ThunderstoreTeamName)-$(MSBuildProjectName)</PluginFolder>
+  </PropertyGroup>
+  
+  <!-- Copy files to Gale plugin folder -->
+  <Target Name="CopyToGalePluginFolder" AfterTargets="PostBuildEvent">
+    <Message Text="Copying to Gale plugin folder" Importance="high" />
+    
+    <!-- Plugin DLL -->
+    <Copy Condition="Exists('$(BepInExPluginsFolder)')" SourceFiles="$(TargetPath)" DestinationFolder="$(PluginFolder)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
+    
+    <!-- Asset Bundle -->
+    <Copy Condition="Exists('$(BepInExPluginsFolder)') And Exists('$(TargetDir)\$(AssetBundleFileName)')" SourceFiles="$(TargetDir)\$(AssetBundleFileName)" DestinationFolder="$(PluginFolder)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
+  </Target>
+</Project>
