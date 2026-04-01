@@ -91,7 +91,7 @@
     <!-- Plugin DLL -->
     <Copy Condition="Exists('$(BepInExPluginsFolder)')" SourceFiles="$(TargetPath)" DestinationFolder="$(PluginFolder)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
     
-    <!-- Asset Bundle -->
+    <!-- AssetBundle -->
     <Copy Condition="Exists('$(BepInExPluginsFolder)') And Exists('$(TargetDir)\$(AssetBundleFileName)')" SourceFiles="$(TargetDir)\$(AssetBundleFileName)" DestinationFolder="$(PluginFolder)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
   </Target>
 </Project>
