@@ -15,6 +15,7 @@ internal static class LethalConfigProxy
     public const string PLUGIN_GUID = LethalConfig.PluginInfo.Guid;
     public static bool IsInstalled => Chainloader.PluginInfos.ContainsKey(PLUGIN_GUID);
 
+    #region Public Methods
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     public static void SkipAutoGen()
     {
@@ -22,7 +23,7 @@ internal static class LethalConfigProxy
     }
 
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-    public static BaseConfigItem AddConfig<T>(ConfigEntry<T> configEntry, bool requiresRestart = false)
+    public static object AddConfig<T>(ConfigEntry<T> configEntry, bool requiresRestart = false)
     {
         if (typeof(T).IsEnum)
         {
@@ -64,6 +65,14 @@ internal static class LethalConfigProxy
     }
 
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+    public static object AddButton(string section, string name, string buttonText, string description, Action callback)
+    {
+        BaseConfigItem configItem = new GenericButtonConfigItem(section, name, description, buttonText, () => callback?.Invoke());
+        return AddConfigItem(configItem);
+    }
+    #endregion
+
+    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     private static BaseConfigItem AddConfigSlider<T>(ConfigEntry<T> configEntry, bool requiresRestart = false)
     {
         // Handle sliders for float and int specifically
@@ -90,13 +99,6 @@ internal static class LethalConfigProxy
     private static BaseConfigItem AddEnumDropdown<T>(ConfigEntry<T> configEntry, bool requiresRestart = false) where T : Enum
     {
         return AddConfigItem(new EnumDropDownConfigItem<T>(configEntry, requiresRestart));
-    }
-
-    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-    public static BaseConfigItem AddButton(string section, string name, string buttonText, string description, Action callback)
-    {
-        BaseConfigItem configItem = new GenericButtonConfigItem(section, name, description, buttonText, () => callback?.Invoke());
-        return AddConfigItem(configItem);
     }
 
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]

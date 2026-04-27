@@ -8,6 +8,7 @@ internal static class Assets
 {
     public static readonly string AssetBundleFileName = "modtemplate_assets";
     public static AssetBundle AssetBundle { get; private set; }
+    public static bool IsLoaded { get; private set; }
 
     public static void Load()
     {
@@ -29,6 +30,8 @@ internal static class Assets
         }
 
         OnAssetBundleLoaded(AssetBundle);
+
+        IsLoaded = true;
     }
 
     private static void OnAssetBundleLoaded(AssetBundle assetBundle)

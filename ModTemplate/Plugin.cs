@@ -1,10 +1,13 @@
 ﻿using BepInEx;
+using com.github.zehsteam.ModTemplate.Dependencies.LethalConfigMod;
+using com.github.zehsteam.ModTemplate.Helpers;
 using com.github.zehsteam.ModTemplate.Managers;
 using HarmonyLib;
 
 namespace com.github.zehsteam.ModTemplate;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+[BepInDependency(LethalConfigProxy.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
 internal class Plugin : BaseUnityPlugin
 {
     private readonly Harmony _harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
@@ -23,5 +26,7 @@ internal class Plugin : BaseUnityPlugin
         //Assets.Load();
 
         ConfigManager.Initialize(Config);
+
+        //NetworkUtils.NetcodePatcherAwake();
     }
 }
