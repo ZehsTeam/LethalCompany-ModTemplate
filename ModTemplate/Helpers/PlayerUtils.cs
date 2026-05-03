@@ -14,6 +14,12 @@ internal static class PlayerUtils
     public static PlayerControllerB[] AlivePlayerScripts => [.. ConnectedPlayerScripts.Where(x => !x.isPlayerDead)];
     public static PlayerControllerB[] DeadPlayerScripts => [.. ConnectedPlayerScripts.Where(x => x.isPlayerDead)];
 
+    public static bool TryGetLocalPlayerScript(out PlayerControllerB playerScript)
+    {
+        playerScript = LocalPlayerScript;
+        return playerScript != null;
+    }
+
     public static bool IsLocalPlayer(PlayerControllerB playerScript)
     {
         if (playerScript == null)

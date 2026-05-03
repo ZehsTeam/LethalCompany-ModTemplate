@@ -87,7 +87,7 @@ internal static class NetworkUtils
         catch (Exception ex)
         {
             // Catch any general exceptions that occur in the process
-            Logger.LogError($"[{nameof(NetworkUtils)}] Failed to run NetcodePatcherAwake: {ex.Message}");
+            Logger.LogError($"[{nameof(NetworkUtils)}] Failed to run {nameof(NetcodePatcherAwake)}: {ex.Message}");
         }
     }
 
