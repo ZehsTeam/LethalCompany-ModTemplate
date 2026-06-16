@@ -72,20 +72,23 @@
     <ThunderstoreTeamName>Zehs</ThunderstoreTeamName>
     <AssetBundleFileName>modtemplate_assets</AssetBundleFileName>
     <AssetBundleFolder>D:\LethalCompanyUnityProjects\LethalCompanyV81\Assets\LethalCompany\Mods\AssetBundles</AssetBundleFolder>
-    
+
     <GaleProfileName>Mod Development</GaleProfileName>
-    
+    <GaleProfileName2>Mod Development Mini</GaleProfileName2>
+
     <GaleDataFolder>$(AppData)\com.kesomannen.gale</GaleDataFolder>
   </PropertyGroup>
   
   <PropertyGroup>
     <AssetBundleFilePath>$(AssetBundleFolder)\$(AssetBundleFileName)</AssetBundleFilePath>
-    
+
     <GaleProfilesFolder>$(GaleDataFolder)\$(Game)\profiles</GaleProfilesFolder>
-    
+
     <BepInExPluginsFolder>$(GaleProfilesFolder)\$(GaleProfileName)\BepInEx\plugins</BepInExPluginsFolder>
-    
+    <BepInExPluginsFolder2>$(GaleProfilesFolder)\$(GaleProfileName2)\BepInEx\plugins</BepInExPluginsFolder2>
+
     <PluginFolder>$(BepInExPluginsFolder)\$(ThunderstoreTeamName)-$(MSBuildProjectName)</PluginFolder>
+    <PluginFolder2>$(BepInExPluginsFolder2)\$(ThunderstoreTeamName)-$(MSBuildProjectName)</PluginFolder2>
   </PropertyGroup>
 
   <!-- NetcodePatch -->
@@ -99,13 +102,15 @@
   
   <!-- Copy files to Gale plugin folder -->
   <Target Name="CopyToGalePluginFolder" AfterTargets="NetcodePatch">
-    <Message Text="Copying to Gale plugin folder" Importance="high" />
+    <Message Text="Copying to Gale plugin folders" Importance="high" />
     
-    <!-- Plugin DLL -->
+    <!-- PluginFolder -->
     <Copy Condition="Exists('$(BepInExPluginsFolder)')" SourceFiles="$(TargetPath)" DestinationFolder="$(PluginFolder)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
-    
-    <!-- AssetBundle -->
     <Copy Condition="Exists('$(BepInExPluginsFolder)') And Exists('$(TargetDir)\$(AssetBundleFileName)')" SourceFiles="$(TargetDir)\$(AssetBundleFileName)" DestinationFolder="$(PluginFolder)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
+
+    <!-- PluginFolder2 -->
+    <Copy Condition="Exists('$(BepInExPluginsFolder2)')" SourceFiles="$(TargetPath)" DestinationFolder="$(PluginFolder2)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
+    <Copy Condition="Exists('$(BepInExPluginsFolder2)') And Exists('$(TargetDir)\$(AssetBundleFileName)')" SourceFiles="$(TargetDir)\$(AssetBundleFileName)" DestinationFolder="$(PluginFolder2)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
   </Target>
   
   <!-- Call with `dotnet build -target:PackThunderstore` -->
