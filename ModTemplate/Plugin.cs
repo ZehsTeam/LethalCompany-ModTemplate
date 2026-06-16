@@ -21,11 +21,11 @@ internal class Plugin : BaseUnityPlugin
         ModTemplate.Logger.Initialize(BepInEx.Logging.Logger.CreateLogSource(MyPluginInfo.PLUGIN_GUID));
         ModTemplate.Logger.LogInfo($"{MyPluginInfo.PLUGIN_NAME} has awoken!");
 
+        ConfigManager.Initialize(Config);
+
         //_harmony.PatchAll(typeof());
 
         //Assets.Load();
-
-        ConfigManager.Initialize(Config);
 
         //NetworkUtils.NetcodePatcherAwake();
     }
